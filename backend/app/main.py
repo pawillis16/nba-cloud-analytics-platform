@@ -1,3 +1,7 @@
+from nba_api.stats.endpoints import leaguedashplayerstats
+
+
+
 from fastapi import FastAPI
 
 
@@ -12,11 +16,42 @@ def health_check():
 def home():
     return {"message": "Welcome to NBA Analytics API"}
 
-@app.get("/players")
-def get_players():
-    return [
-        {"name": "LeBron James", "team": "Los Angeles Lakers", "position": "SF"},
-        {"name": "Stephen Curry", "team": "Golden State Warriors", "position": "PG"},
-        {"name": "Luka Dončić", "team": "Los Angeles Lakers", "position": "PG"},
-        {"name": "Giannis Antetokounmpo", "team": "Milwaukee Bucks", "position": "PF"}
-    ]
+@app.get("/real-players")
+def real_players():
+    data = leaguedashplayerstats.LeagueDashPlayerStats().get_dict()
+
+    rows = data['resultSets'][0]['rowSet']
+
+    players = []
+
+    for row in rows[:10]:
+        players.append({
+            "player_name": row[1],
+            "team": row[4],
+            "games_played": row[6],
+            "minutes": round(row[10], 1),
+            "points_per_game": round(row[30] / row[6], 1)
+        })
+
+    return players
+
+@app.get("/real-players/{team}")
+def real_players_by_team(team: str):
+    data = leaguedashplayerstats.LeagueDashPlayerStats().get_dict()
+
+    rows = data["resultSets"][0]["rowSet"]
+
+    players = []
+
+    for row in rows:
+        if row[4] == team.upper():
+            players.append({
+                "player_name": row[1],
+                "team": row[4],
+                "games_played": row[6],
+                "minutes": round(row[10], 1),
+                "points_per_game": round(row[30] / row[6], 1)
+            })
+
+    return players
+
