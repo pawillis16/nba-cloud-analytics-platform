@@ -30,7 +30,9 @@ def real_players():
             "team": row[4],
             "games_played": row[6],
             "minutes": round(row[10], 1),
-            "points_per_game": round(row[30] / row[6], 1)
+            "points_per_game": round(row[30] / row[6], 1),
+            "rebounds_per_game": round(row[22] / row[6], 1),
+            "assists_per_game": round(row[23] / row[6], 1)
         })
 
     return players
@@ -50,8 +52,14 @@ def real_players_by_team(team: str):
                 "team": row[4],
                 "games_played": row[6],
                 "minutes": round(row[10], 1),
-                "points_per_game": round(row[30] / row[6], 1)
+                "points_per_game": round(row[30] / row[6], 1),
+                "rebounds_per_game": round(row[22] / row[6], 1),
+                "assists_per_game": round(row[23] / row[6], 1)
             })
 
-    return players
+    return {
+        "team": team.upper(),
+        "player_count": len(players),
+        "players": players
+    }
 
