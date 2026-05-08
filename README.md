@@ -10,9 +10,11 @@ I started this project to learn:
 - Git/GitHub workflow
 
 Current features:
-- FastAPI backend
-- live NBA stats data using nba_api
-- team filtering endpoint
+- FastAPI backend API
+- Live NBA stats integration using nba_api
+- Team filtering endpoint
+- Top scorers endpoint
+- Query parameter support (?limit=)
 - JSON API responses
 
 Example endpoints:
