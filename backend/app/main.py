@@ -38,7 +38,7 @@ def real_players():
     return players
 
 @app.get("/real-players/top-scorers")
-def top_scorers():
+def top_scorers(limit: int = 25):
     data = leaguedashplayerstats.LeagueDashPlayerStats().get_dict()
     rows = data["resultSets"][0]["rowSet"]
 
@@ -56,8 +56,8 @@ def top_scorers():
 
     return {
         "stat": "points_per_game",
-        "player_count": 10,
-        "players": players[:10]
+        "player_count": limit,
+        "players": players[:limit]
     }
 
 @app.get("/real-players/{team}")
