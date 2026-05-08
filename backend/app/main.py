@@ -37,6 +37,29 @@ def real_players():
 
     return players
 
+@app.get("/real-players/top-scorers")
+def top_scorers():
+    data = leaguedashplayerstats.LeagueDashPlayerStats().get_dict()
+    rows = data["resultSets"][0]["rowSet"]
+
+    players = []
+
+    for row in rows:
+        players.append({
+            "player_name": row[1],
+            "team": row[4],
+            "games_played": row[6],
+            "points_per_game": round(row[30] / row[6], 1)
+        })
+
+    players = sorted(players, key=lambda player: player["points_per_game"], reverse=True)
+
+    return {
+        "stat": "points_per_game",
+        "player_count": 10,
+        "players": players[:10]
+    }
+
 @app.get("/real-players/{team}")
 def real_players_by_team(team: str):
     data = leaguedashplayerstats.LeagueDashPlayerStats().get_dict()
